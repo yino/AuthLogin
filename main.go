@@ -9,7 +9,6 @@ import (
 func main() {
 	router := gin.Default()
 	router.GET("/gitee/getToken", auth.GiteenGetToken)
-	router.GET("/gitee/login", auth.GiteeLogin)
-	router.GET("/gitee/tokenRollback", auth.GiteeRollback)
+	router.GET("/gitee/login", auth.GiteeRollback)
 	router.Run("localhost:9527")
 }
