@@ -1,14 +1,14 @@
 package auth
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 	// r "github.com/solos/requests"
-	"bytes"
-	"io/ioutil"
-	"net/url"
 )
 
 var clientId = "a28944a66fd8a0928a4ce5224ff5289c2cdcfa25a4f5057cccb99f561ce6b89b"
@@ -18,7 +18,7 @@ var getTokenRollback = "http://localhost:9527/gitee/tokenRollback"
 
 func GiteenGetToken(c *gin.Context) {
 
-	authUrl := fmt.Sprintf("https://gitee.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code", clientId, getCodeRollback)
+	authUrl := fmt.Sprintf("https://gitee.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&scope=user_info", clientId, getCodeRollback)
 	c.Redirect(http.StatusMovedPermanently, authUrl)
 }
 
@@ -36,7 +36,8 @@ func GiteeRollback(c *gin.Context) {
 }
 
 func getAccessToken(code string) string {
-	accessToeknUrl := fmt.Sprintf("https://gitee.com/oauth/token?grant_type=authorization_code&code=%s&client_id=%s&redirect_uri=%s&client_secret=%s", code, clientId, getTokenRollback, clientSecret)
+	accessToeknUrl := fmt.Sprintf("https://gitee.com/oauth/token?grant_type=authorization_code&code=%s&client_id=%s&client_secret=%s&redirect_uri=%s", code, clientId, clientSecret, getTokenRollback)
+	fmt.Println(accessToeknUrl)
 
 	postValue := url.Values{}
 
@@ -65,6 +66,7 @@ func getAccessToken(code string) string {
 	// fmt.Println(resp.Content)
 	// return resp.Content
 	return "123123"
+
 }
 
 func getUserInfo(accessToken string) string {
